@@ -62,7 +62,7 @@ class Controller
             puts "The game is a draw!"
         else
             puts "Player #{result} is the winner!"
-            @game.save #saves game to new savefile, have the loaded and previously saved games remember its folderName in the Game class
+            @game.save
         end
         puts $spacer
 
@@ -147,7 +147,3 @@ class Controller
 end
 
 c = Controller.new
-
-#TODO:
-    # Fix saving and loading methods to allow them to overwrite files they were loaded from/saved to
-    # Test save game input from controller
