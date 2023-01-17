@@ -9,6 +9,7 @@ class Game
         @col = col
         @turnPlayer = turnPlayer
         @moveHistory = moveHistory
+        @folderName = ''
 
         @@board = Board.new(@row, @col)
     end
@@ -18,12 +19,15 @@ class Game
     end
 
     def save
-        time = Time.new
-        folderName = "#{time.year}#{time.month}#{time.day}_#{time.hour}#{time.min}#{time.sec}"
-        FileUtils.mkdir_p 'games/' + folderName
+        if @folderName == ''
+            time = Time.new
+            @folderName = "#{time.year}#{time.month}#{time.day}_#{time.hour}#{time.min}#{time.sec}"
+        end
+
+        FileUtils.mkdir_p 'games/' + @folderName
 
         #save board state
-        open('games/' + folderName + '/board.txt', 'w') { |f|
+        open('games/' + @folderName + '/board.txt', 'w') { |f|
             @@board.field.each_with_index do |row, index|
                 row.each do |col|
                     f << col.value
@@ -35,7 +39,7 @@ class Game
         }
 
         #save P1 move history
-        open('games/' + folderName + '/moveHistoryP1.txt', 'w') { |f|
+        open('games/' + @folderName + '/moveHistoryP1.txt', 'w') { |f|
             moveHistory['p1'].each_with_index do |move, index|
                 f << move
                 if index != moveHistory['p1'].size - 1
@@ -45,7 +49,7 @@ class Game
         }
 
         #save P2 move history
-        open('games/' + folderName + '/moveHistoryP2.txt', 'w') { |f|
+        open('games/' + @folderName + '/moveHistoryP2.txt', 'w') { |f|
             moveHistory['p2'].each_with_index do |move, index|
                 f << move
                 if index != moveHistory['p2'].size - 1
@@ -55,14 +59,15 @@ class Game
         }
 
         #save turn player
-        open('games/' + folderName + '/turnPlayer.txt', 'w') { |f|
+        open('games/' + @folderName + '/turnPlayer.txt', 'w') { |f|
             f << turnPlayer
         }
 
     end
 
     def load(folderName)
-        path = "./games/" + folderName
+        @folderName = folderName
+        path = "./games/" + @folderName
         r = 0
 
         #load board state
